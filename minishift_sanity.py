@@ -132,11 +132,11 @@ class minishiftSanity(Test):
         self.assertIn(logout_str, output, "Failed to log out")
             
     def test_ms_ssh(self):
-        cmd = "minishift ssh"
-        child = pexpect.spawn(cmd)
-        index = child.expect(["Last login:", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        child = pexpect.spawn("minishift ssh")
+	child.sendline("whoami")
+	index = child.expect(["docker", pexpect.EOF, pexpect.TIMEOUT], timeout=10)
         if index==0:
-            self.log.info("Minishift ssh successful")
+            self.log.info("Minishift ssh was successful")
         else:
             self.fail("Minishift ssh failed")
 
