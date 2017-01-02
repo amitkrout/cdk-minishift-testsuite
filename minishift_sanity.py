@@ -100,7 +100,7 @@ class minishiftSanity(Test):
             cmd = "minishift start"
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
-        index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=300)
+        index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=600)
         if index==0:
             self.log.info("Minishift start finished, OpenShift is started")
         else:
