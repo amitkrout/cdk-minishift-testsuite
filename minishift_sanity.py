@@ -93,8 +93,12 @@ class minishiftSanity(Test):
     
     """        
     def test_ms_start(self):
-        cmd = "minishift start"
-        self.log.info("Starting minishift...")
+	if self.iso_url:
+	    cmd = "minishift start --iso-url " + self.iso_url
+            self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
+	else:
+            cmd = "minishift start"
+            self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
         index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=120)
         if index==0:
