@@ -123,11 +123,11 @@ class minishiftSanity(Test):
     
     def test_php_project(self):
         clean_failed_app(self, self.params.get('openshift_nodejs_PROJECT'))
-        new_project(self, self.params.get('openshift_php_PROJECT'), self.params.get('openshift_php_template'), self.params.get('service_php_NAME'), tempalte = True)
+        new_project(self, self.params.get('openshift_php_PROJECT'), self.params.get('openshift_php_template'), self.params.get('service_php_NAME'), template = True)
     
     def test_nodejs_mongodb_template(self):
         clean_failed_app(self, self.params.get('openshift_php_PROJECT'))
-        new_project(self, self.params.get('openshift_nodejsmongodb_PROJECT'), self.params.get('openshift_nodejsmongodb_TEMPLATE'), self.params.get('service_nodejsmongodb_NAME'), tempalte = True, dbservicename = "mongodb")
+        new_project(self, self.params.get('openshift_nodejsmongodb_PROJECT'), self.params.get('openshift_nodejsmongodb_TEMPLATE'), self.params.get('service_nodejsmongodb_NAME'), template = True, dbservicename = "mongodb")
     
     def test_logout(self):
         clean_failed_app(self, self.params.get('openshift_nodejsmongodb_PROJECT'))
