@@ -105,6 +105,22 @@ class minishiftSanity(Test):
             self.log.info("Minishift start finished, OpenShift is started")
         else:
             self.fail("Minishift start failed")
+	
+    def test_ms_console(self):
+        cmd = "minishift console --url"
+        self.log.info("Running command: " + cmd)
+        child = pexpect.spawn(cmd)
+        console_url = child.read()[:-2]
+        self.log.info("Returned url of console: " + console_url)
+
+        cmd = "curl " + console_url + "/console/ --insecure"
+        self.log.info("Running command: " + cmd)
+        child = pexpect.spawn(cmd)
+        index = child.expect(['<title>OpenShift Web Console</title>', '"status": "Failure"', pexpect.TIMEOUT], timeout=10)
+        if index == 0:
+            self.log.info("Command returned valid page - has <title>OpenShift Web Console</title>")
+        else:
+            self.fail("Command did not returned valid page")
             
     def test_python_project(self):
         new_project(self, self.params.get('openshift_python_PROJECT'), self.params.get('openshift_python_REGISTRY'), self.params.get('service_python_NAME'))
