@@ -106,7 +106,7 @@ class minishiftSanity(Test):
         else:
             self.fail("Minishift start failed")
 	
-    def test_ms_console(self):
+    def atest_ms_console(self):
         cmd = "minishift console --url"
         self.log.info("Running command: " + cmd)
         child = pexpect.spawn(cmd)
