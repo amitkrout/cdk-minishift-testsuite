@@ -100,7 +100,7 @@ class minishiftSanity(Test):
             cmd = "minishift start --show-libmachine-logs --v=5"
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
-        index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=300)
+        index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=600)
         if index==0:
             self.log.info("Minishift start finished, OpenShift is started")
         else:
@@ -170,9 +170,9 @@ class minishiftSanity(Test):
         else:
             self.fail("Error while stopping the machine")
             
-    def atest_ms_repetetive_use(self):
+    def test_ms_repetetive_use(self):
         self.log.info("Testing repetetive use of minishifrt (start-stop-start...)")
-        for x in range(3):
+        for x in range(5):
             self.test_ms_start()
             self.test_ms_stop()
             self.log.info("Start-stop of machine OK - run number: " + str(x))
