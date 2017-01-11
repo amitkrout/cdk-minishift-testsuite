@@ -58,6 +58,7 @@ class minishiftSanity(Test):
         Arg:
             self (object): Object of the current method
         '''
+        global minishift
         minishift = imp.load_source('minishift', self.params.get('minishift_lib_MODULE'))
         self.log.info("###########################################################################################")
         self.log.info("Avocado version : %s" % VERSION)
@@ -65,6 +66,8 @@ class minishiftSanity(Test):
         self.Hypervisor_Provider = self.params.get('Hypervisor_Provider')
         self.iso_url = self.params.get('iso_url')
         self.Provisioning_OpenShift = self.params.get('Provisioning_OpenShift')
+        sys.path.append(self.params.get('minishift_PATH'))
+        sys.path.append(self.params.get('Provisioning_OpenShift'))
         
     """    
     def test_ms_start(self):
