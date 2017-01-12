@@ -170,7 +170,7 @@ class minishiftSanity(Test):
         else:
             self.fail("Error while stopping the machine")
             
-    def test_ms_repetetive_use(self):
+    def atest_ms_repetetive_use(self):
         self.log.info("Testing repetetive use of minishifrt (start-stop-start...)")
         for x in range(5):
             self.test_ms_start()
