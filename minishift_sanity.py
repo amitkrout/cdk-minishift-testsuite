@@ -58,7 +58,7 @@ class minishiftSanity(Test):
         Arg:
             self (object): Object of the current method
         '''
-        global minishift
+        global minishift, iso_url
         minishift = imp.load_source('minishift', self.params.get('minishift_lib_MODULE'))
         self.log.info("###########################################################################################")
         self.log.info("Avocado version : %s" % VERSION)
@@ -95,7 +95,10 @@ class minishiftSanity(Test):
     
     """        
     def test_ms_start(self):
-        cmd = "minishift start"
+        if iso_url == "":
+            cmd = "minishift start --vm-driver " +self.Hypervisor_Provider
+        else:
+            cmd = "minishift start --vm-driver " +self.Hypervisor_Provider +" --iso-url " +self.iso_url
         self.log.info("Starting minishift...")
         child = pexpect.spawn(cmd)
         index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=120)
