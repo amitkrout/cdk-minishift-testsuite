@@ -64,7 +64,7 @@ class minishiftSanity(Test):
         self.log.info("Avocado version : %s" % VERSION)
         self.log.info("###########################################################################################")
         self.Hypervisor_Provider = self.params.get('Hypervisor_Provider')
-        self.iso_url = self.params.get('iso_url')
+        iso_url = self.params.get('iso_url')
         self.Provisioning_OpenShift = self.params.get('Provisioning_OpenShift')
         sys.path.append(self.params.get('minishift_PATH'))
         sys.path.append(self.params.get('Provisioning_OpenShift'))
