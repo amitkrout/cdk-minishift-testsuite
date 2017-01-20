@@ -182,7 +182,7 @@ class minishiftSanity(Test):
         #self.test_ms_stop()
         cmd = "minishift delete"
         child = pexpect.spawn(cmd)
-        index = child.expect(["Machine deleted", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
+        index = child.expect(["Minishift VM deleted.", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
         if index==0:
             self.log.info("Minishift VM deleted.")
         else:
