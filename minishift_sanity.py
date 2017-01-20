@@ -164,11 +164,11 @@ class minishiftSanity(Test):
         cmd = "minishift stop"
         self.log.info("Stopping minishift...")
         child = pexpect.spawn(cmd)
-        index = child.expect(["Machine stopped.", pexpect.EOF, pexpect.TIMEOUT], timeout=60)
+        index = child.expect(["Cluster stopped.", pexpect.EOF, pexpect.TIMEOUT], timeout=60)
         if index==0:
-            self.log.info("Machine stopped.")
+            self.log.info("Cluster stopped.")
         else:
-            self.fail("Error while stopping the machine")
+            self.fail("Error while stopping the cluster.")
             
     def test_ms_repetetive_use(self):
         self.log.info("Testing repetetive use of minishifrt (start-stop-start...)")
@@ -184,6 +184,6 @@ class minishiftSanity(Test):
         child = pexpect.spawn(cmd)
         index = child.expect(["Machine deleted", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
         if index==0:
-            self.log.info("Machine deleted.")
+            self.log.info("Minishift VM deleted.")
         else:
             self.fail("Delete attempt failed.")
