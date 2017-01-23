@@ -1,7 +1,9 @@
-Hypervisor_Provider : "kvm"
-minishift_PATH : "/home/agajdosi/minishift/minishift"
-minishift_lib_MODULE : "/home/agajdosi/git/cdk-minishift-testsuite/library/minishift_testlib.py"
+Hypervisor_Provider : ""
+minishift_PATH : ""
+minishift_lib_MODULE : ""
 Provisioning_OpenShift : ""
+iso_url : ""
+
 #Set the project inputs (python project name, python registry path and python service name). It uses image from redhat registry.
 openshift_python_PROJECT : "test-python27"
 openshift_python_REGISTRY : "registry.access.redhat.com/rhscl/python-27-rhel7~https://github.com/openshift/django-ex" 
@@ -26,9 +28,3 @@ service_php_NAME : "cakephp-example"
 openshift_nodejsmongodb_PROJECT : "test-nodejs-mongodb"
 openshift_nodejsmongodb_TEMPLATE : "nodejs-mongodb-example" 
 service_nodejsmongodb_NAME : "nodejs-mongodb-example"
-
-iso_url : "https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-alpha.1/minishift-centos.iso"
-iso_url : "http://cdk-builds.usersys.redhat.com/builds/weekly/26-Dec-2016.3_0.alpha/minishift-rhel.iso"
-iso_url : ""
-
-
