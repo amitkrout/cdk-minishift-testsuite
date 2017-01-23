@@ -90,8 +90,33 @@ class minishiftSanity(Test):
         else:
             self.fail("Minishift start failed")
             provision_path = None
+    """
     
-    """        
+    def test_ms_setup_cdk(self):
+        '''
+        Testing if setup-cdk command is able to setup CDK properly:
+        RHEL iso and OCP binary are in place
+        '''
+        cmd = "minishift setup-cdk"
+        self.log.info("Running command: " + cmd)
+        child = pexpect.spawn(cmd)
+        index = child.expect(["CDK 3 setup complete.", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        if not index==0:
+            self.fail("CDK setup failed")
+        self.log.info("Checking if rhel.iso exists")
+        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/cache/iso/minishift-rhel.iso" )
+        if not exists:
+            self.fail("minishift-rhel.iso is not present")
+        self.log.info("Checking if oc binary exists")
+        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/cache/oc/v3.4.0/oc" )
+        if not exists:
+            self.fail("oc binary is not present")
+        self.log.info("Checking if config.json exists")
+        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/config/config.json" )
+        if not exists:
+            self.fail("config.json binary is not present")
+        self.log.info("CDK Installation successful")
+
     def test_ms_start(self):
 	if self.iso_url:
 	    cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
@@ -105,8 +130,18 @@ class minishiftSanity(Test):
             self.log.info("Minishift start finished, OpenShift is started")
         else:
             self.fail("Minishift start failed")
+
+    def test_ms_ssh(self):
+        child = pexpect.spawn("minishift ssh")
+	child.sendline("whoami")
+	index = child.expect(["docker", pexpect.EOF, pexpect.TIMEOUT], timeout=10)
+        if index==0:
+            self.log.info("Minishift ssh was successful")
+        else:
+            self.fail("Minishift ssh failed")
 	
-    def atest_ms_console(self):
+    def test_ms_console(self):
+        ''' Testing if url of web console returned by minishift is accessible '''
         cmd = "minishift console --url"
         self.log.info("Running command: " + cmd)
         child = pexpect.spawn(cmd)
@@ -121,6 +156,45 @@ class minishiftSanity(Test):
             self.log.info("Command returned valid page - has <title>OpenShift Web Console</title>")
         else:
             self.fail("Command did not returned valid page")
+
+    def test_ms_ip(self):
+        ''' Testing if ip command gives right ip and host to guest ping is ok '''
+        cmd = "minishift ip"
+        self.log.info("Running command: " + cmd)
+        child = pexpect.spawn(cmd)
+        machine_ip = child.read()[:-2]
+        self.log.info("Returned host ip: " + machine_ip)
+        cmd = "ping -c 5 " + machine_ip
+        child = pexpect.spawn(cmd)
+        index = child.expect (["5 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        if index==0:
+            self.log.info("Ping successful")
+        else:
+            self.fail("Ping failed")
+
+    def test_dns_from_guest(self):
+        ''' Testing dns connection from guest to outside network '''
+        self.log.info("Checking dns from guest to outside network")
+        cmd = "minishift ssh"
+        child = pexpect.spawn(cmd)
+        child.sendline("ping -c 5 twitter.com")
+        index = child.expect (["0 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        if index==1:
+            self.log.info("Guest ping to twitter.com was successful")
+        else:
+            self.fail("Guest ping to twitter.com failed")
+
+    def test_dns_from_host(self):
+        ''' Testing dns connection from guest to outside network '''
+        self.log.info("Checking dns from guest to outside network")
+        cmd = "ping -c 5 twitter.com"
+        child = pexpect.spawn(cmd)
+        index = child.expect (["0 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        if index==1:
+            self.log.info("Host ping to twitter.com was successful")
+        else:
+            self.fail("Host ping to twitter.com failed")
+
             
     def atest_python_project(self):
         new_project(self, self.params.get('openshift_python_PROJECT'), self.params.get('openshift_python_REGISTRY'), self.params.get('service_python_NAME'))
@@ -150,15 +224,6 @@ class minishiftSanity(Test):
         output = minishift.oc_logout(self)
         logout_str = "Logged " +"\"" +self.params.get('openshift_USERNAME') +"\"" +" out on " +"\"https://"
         self.assertIn(logout_str, output, "Failed to log out")
-            
-    def test_ms_ssh(self):
-        child = pexpect.spawn("minishift ssh")
-	child.sendline("whoami")
-	index = child.expect(["docker", pexpect.EOF, pexpect.TIMEOUT], timeout=10)
-        if index==0:
-            self.log.info("Minishift ssh was successful")
-        else:
-            self.fail("Minishift ssh failed")
 
     def test_ms_stop(self):
         cmd = "minishift stop"
@@ -170,7 +235,7 @@ class minishiftSanity(Test):
         else:
             self.fail("Error while stopping the cluster.")
             
-    def atest_ms_repetetive_use(self):
+    def test_repetetive_use(self):
         self.log.info("Testing repetetive use of minishifrt (start-stop-start...)")
         for x in range(5):
             self.test_ms_start()
@@ -179,10 +244,9 @@ class minishiftSanity(Test):
     
     def test_ms_delete_existing(self):
         self.log.info("Trying to delete existing machine...")
-        #self.test_ms_stop()
         cmd = "minishift delete"
         child = pexpect.spawn(cmd)
-        index = child.expect(["Minishift VM deleted.", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
+        index = child.expect(["Minishift VM deleted", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
         if index==0:
             self.log.info("Minishift VM deleted.")
         else:
