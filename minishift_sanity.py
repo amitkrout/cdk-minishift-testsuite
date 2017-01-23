@@ -120,10 +120,10 @@ class minishiftSanity(Test):
         self.log.info("CDK Installation successful")
 
     def test_ms_start(self):
-	      if self.iso_url:
-	          cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
+	if self.iso_url:
+	    cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
-	      else:
+	else:
             cmd = "minishift start --show-libmachine-logs --v=5"
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
