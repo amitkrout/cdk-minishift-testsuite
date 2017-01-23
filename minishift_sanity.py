@@ -121,7 +121,7 @@ class minishiftSanity(Test):
 
     def test_ms_start(self):
 	if self.iso_url:
-	    cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
+            cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
 	else:
             cmd = "minishift start --show-libmachine-logs --v=5"
