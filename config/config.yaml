@@ -3,6 +3,8 @@ iso_url : ""
 minishift_PATH : ""
 minishift_lib_MODULE : ""
 Provisioning_OpenShift : ""
+RHN_USERNAME : ""
+RHN_PASSWORD : ""
 #Set the project inputs (python project name, python registry path and python service name). It uses image from redhat registry.
 openshift_python_PROJECT : "test-python27"
 openshift_python_REGISTRY : "registry.access.redhat.com/rhscl/python-27-rhel7~https://github.com/openshift/django-ex" 
