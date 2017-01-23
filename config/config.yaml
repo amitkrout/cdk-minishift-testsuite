@@ -2,6 +2,8 @@ Hypervisor_Provider : "kvm"
 minishift_PATH : "/home/agajdosi/minishift/minishift"
 minishift_lib_MODULE : "/home/agajdosi/git/cdk-minishift-testsuite/library/minishift_testlib.py"
 Provisioning_OpenShift : ""
+RHN_USERNAME : ""
+RHN_PASSWORD : ""
 #Set the project inputs (python project name, python registry path and python service name). It uses image from redhat registry.
 openshift_python_PROJECT : "test-python27"
 openshift_python_REGISTRY : "registry.access.redhat.com/rhscl/python-27-rhel7~https://github.com/openshift/django-ex" 

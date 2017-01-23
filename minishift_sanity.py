@@ -58,14 +58,16 @@ class minishiftSanity(Test):
         Arg:
             self (object): Object of the current method
         '''
-	global minishift
+        global minishift, iso_url
         minishift = imp.load_source('minishift', self.params.get('minishift_lib_MODULE'))
         self.log.info("###########################################################################################")
         self.log.info("Avocado version : %s" % VERSION)
         self.log.info("###########################################################################################")
         self.Hypervisor_Provider = self.params.get('Hypervisor_Provider')
-        self.iso_url = self.params.get('iso_url')
+        iso_url = self.params.get('iso_url')
         self.Provisioning_OpenShift = self.params.get('Provisioning_OpenShift')
+        sys.path.append(self.params.get('minishift_PATH'))
+        sys.path.append(self.params.get('Provisioning_OpenShift'))
         
     """    
     def test_ms_start(self):
@@ -118,10 +120,10 @@ class minishiftSanity(Test):
         self.log.info("CDK Installation successful")
 
     def test_ms_start(self):
-	if self.iso_url:
-	    cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
+	      if self.iso_url:
+	          cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
-	else:
+	      else:
             cmd = "minishift start --show-libmachine-logs --v=5"
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
