@@ -32,7 +32,3 @@ service_php_NAME : "cakephp-example"
 openshift_nodejsmongodb_PROJECT : "test-nodejs-mongodb"
 openshift_nodejsmongodb_TEMPLATE : "nodejs-mongodb-example" 
 service_nodejsmongodb_NAME : "nodejs-mongodb-example"
-
-
-
-
