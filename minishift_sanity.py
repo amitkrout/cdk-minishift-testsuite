@@ -132,6 +132,7 @@ class minishiftSanity(Test):
         self.log.info("CDK Installation successful")
 
     def test_ms_start(self):
+	time.sleep(10)
 	if self.iso_url:
             cmd = "minishift start --iso-url " + self.iso_url + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
@@ -205,7 +206,6 @@ class minishiftSanity(Test):
         cmd = "ping -c 5 twitter.com"
         child = pexpect.spawn(cmd)
         index = child.expect (["0 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
-        time.sleep(10)
         if index==1:
             self.log.info("Host ping to twitter.com was successful")
         else:
@@ -242,10 +242,12 @@ class minishiftSanity(Test):
         self.assertIn(logout_str, output, "Failed to log out")
 
     def test_ms_stop(self):
+	time.sleep(10)
         cmd = "minishift stop"
         self.log.info("Stopping minishift...")
         child = pexpect.spawn(cmd)
         index = child.expect(["Cluster stopped.", pexpect.EOF, pexpect.TIMEOUT], timeout=60)
+        time.sleep(10)
         if index==0:
             self.log.info("Cluster stopped.")
         else:
