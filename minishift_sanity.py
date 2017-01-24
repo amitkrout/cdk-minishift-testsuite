@@ -112,6 +112,7 @@ class minishiftSanity(Test):
         self.log.info("Running command: " + cmd)
         child = pexpect.spawn(cmd)
         index = child.expect(["CDK 3 setup complete.", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        self.log.info("Console output: \n" + child.before + child.after)
         if not index==0:
             self.fail("CDK setup failed")
         self.log.info("Checking if rhel.iso exists")
@@ -132,14 +133,19 @@ class minishiftSanity(Test):
         self.log.info("CDK Installation successful")
 
     def test_ms_start(self):
+        time.sleep(10)
 	if self.iso_url:
             cmd = "minishift start --iso-url " + self.iso_url + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
+            self.log.info(" - running command: " + cmd)
 	else:
             cmd = "minishift start " + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
+            self.log.info(" - running command: " + cmd)
         child = pexpect.spawn(cmd)
         index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=600)
+        self.log.info("Console output: \n" + child.before + child.after)
+        time.sleep(10)
         if index==0:
             self.log.info("Minishift start finished, OpenShift is started")
         else:
@@ -149,6 +155,7 @@ class minishiftSanity(Test):
         child = pexpect.spawn("minishift ssh")
 	child.sendline("whoami")
 	index = child.expect(["docker", pexpect.EOF, pexpect.TIMEOUT], timeout=10)
+	self.log.info("Console output: \n" + child.before + child.after)
         if index==0:
             self.log.info("Minishift ssh was successful")
         else:
@@ -161,11 +168,11 @@ class minishiftSanity(Test):
         child = pexpect.spawn(cmd)
         console_url = child.read()[:-2]
         self.log.info("Returned url of console: " + console_url)
-
         cmd = "curl " + console_url + "/console/ --insecure"
         self.log.info("Running command: " + cmd)
         child = pexpect.spawn(cmd)
         index = child.expect(['<title>OpenShift Web Console</title>', '"status": "Failure"', pexpect.TIMEOUT], timeout=10)
+        self.log.info("Console output: \n" + child.before + child.after)
         if index == 0:
             self.log.info("Command returned valid page - has <title>OpenShift Web Console</title>")
         else:
@@ -181,6 +188,7 @@ class minishiftSanity(Test):
         cmd = "ping -c 5 " + machine_ip
         child = pexpect.spawn(cmd)
         index = child.expect (["5 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        self.log.info("Console output: \n" + child.before + child.after)
         if index==0:
             self.log.info("Ping successful")
         else:
@@ -193,6 +201,7 @@ class minishiftSanity(Test):
         child = pexpect.spawn(cmd)
         child.sendline("ping -c 5 twitter.com")
         index = child.expect (["0 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        self.log.info("Console output: \n" + child.before + child.after)
         if index==1:
             self.log.info("Guest ping to twitter.com was successful")
         else:
@@ -204,6 +213,7 @@ class minishiftSanity(Test):
         cmd = "ping -c 5 twitter.com"
         child = pexpect.spawn(cmd)
         index = child.expect (["0 received", "received", pexpect.EOF, pexpect.TIMEOUT], timeout=30)
+        self.log.info("Console output: \n" + child.before + child.after)
         if index==1:
             self.log.info("Host ping to twitter.com was successful")
         else:
@@ -240,10 +250,13 @@ class minishiftSanity(Test):
         self.assertIn(logout_str, output, "Failed to log out")
 
     def test_ms_stop(self):
+        time.sleep(10)
         cmd = "minishift stop"
         self.log.info("Stopping minishift...")
         child = pexpect.spawn(cmd)
         index = child.expect(["Cluster stopped.", pexpect.EOF, pexpect.TIMEOUT], timeout=60)
+        self.log.info("Console output: \n" + child.before + child.after)
+        time.sleep(10)
         if index==0:
             self.log.info("Cluster stopped.")
         else:
@@ -255,12 +268,13 @@ class minishiftSanity(Test):
             self.test_ms_start()
             self.test_ms_stop()
             self.log.info("Start-stop of machine OK - run number: " + str(x))
-    
+
     def test_ms_delete_existing(self):
         self.log.info("Trying to delete existing machine...")
         cmd = "minishift delete"
         child = pexpect.spawn(cmd)
         index = child.expect(["Minishift VM deleted", "Host does not exist", pexpect.EOF, pexpect.TIMEOUT],timeout=60)
+        self.log.info("Console output: \n" + child.before + child.after)
         if index==0:
             self.log.info("Minishift VM deleted.")
         else:
