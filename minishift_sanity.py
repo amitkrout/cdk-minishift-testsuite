@@ -134,11 +134,11 @@ class minishiftSanity(Test):
 
     def test_ms_start(self):
         time.sleep(10)
-	if self.iso_url:
+        if self.iso_url:
             cmd = "minishift start --iso-url " + self.iso_url + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
             self.log.info(" - running command: " + cmd)
-	else:
+        else:
             cmd = "minishift start " + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
             self.log.info(" - running command: " + cmd)
