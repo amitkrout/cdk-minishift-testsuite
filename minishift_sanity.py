@@ -5,6 +5,7 @@ from avocado import VERSION
 import logging
 import time
 import imp
+import glob
 
 def new_project(self, projectname, registry, servicename, tempalte = False, dbservicename = "default"):
     
@@ -58,17 +59,21 @@ class minishiftSanity(Test):
         Arg:
             self (object): Object of the current method
         '''
-        global minishift, iso_url
+        global minishift
         minishift = imp.load_source('minishift', self.params.get('minishift_lib_MODULE'))
         self.log.info("###########################################################################################")
         self.log.info("Avocado version : %s" % VERSION)
         self.log.info("###########################################################################################")
         self.Hypervisor_Provider = self.params.get('Hypervisor_Provider')
-        iso_url = self.params.get('iso_url')
+        self.iso_url = self.params.get('iso_url')
         self.Provisioning_OpenShift = self.params.get('Provisioning_OpenShift')
+        self.Is_Downstream = self.params.get('Is_Downstream')
+        self.RHN_Username = self.params.get('RHN_USERNAME')
+        self.RHN_Password = self.params.get('RHN_PASSWORD')
         sys.path.append(self.params.get('minishift_PATH'))
         sys.path.append(self.params.get('Provisioning_OpenShift'))
-        
+        self.log.info("Is downstream: ", self.Is_Downstream)
+
     """    
     def test_ms_start(self):
         cmd = "minishift start --vm-driver " +self.Hypervisor_Provider +" --iso-url " +self.iso_url
@@ -97,8 +102,12 @@ class minishiftSanity(Test):
     def test_ms_setup_cdk(self):
         '''
         Testing if setup-cdk command is able to setup CDK properly:
-        RHEL iso and OCP binary are in place
+        RHEL iso and OCP binary are in place.
         '''
+        self.log.info(self.Is_Downstream)
+        if self.Is_Downstream == False:
+            self.log.info("Upstream testing is checked: skipping test for setup-cdk command")
+            return
         cmd = "minishift setup-cdk"
         self.log.info("Running command: " + cmd)
         child = pexpect.spawn(cmd)
@@ -110,9 +119,12 @@ class minishiftSanity(Test):
         if not exists:
             self.fail("minishift-rhel.iso is not present")
         self.log.info("Checking if oc binary exists")
-        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/cache/oc/v3.4.0/oc" )
-        if not exists:
-            self.fail("oc binary is not present")
+        oc_binaries = glob.glob( os.environ['HOME'] + "/.minishift/cache/oc/v3.*")
+        if not oc_binaries:
+            self.fail("oc binary v3.* not found")
+        self.log.info("OCP binaries for v3.x found:")
+        for binary in oc_binaries:
+            self.log.info(binary)
         self.log.info("Checking if config.json exists")
         exists = os.path.isfile( os.environ['HOME'] + "/.minishift/config/config.json" )
         if not exists:
@@ -121,10 +133,10 @@ class minishiftSanity(Test):
 
     def test_ms_start(self):
 	if self.iso_url:
-            cmd = "minishift start --show-libmachine-logs --v=5 --iso-url " + self.iso_url
+            cmd = "minishift start --iso-url " + self.iso_url + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url specified, starting minishift with --iso-url flag: " + self.iso_url)
 	else:
-            cmd = "minishift start --show-libmachine-logs --v=5"
+            cmd = "minishift start " + " --username " + self.RHN_Username + " --password " + self.RHN_Password
             self.log.info("iso_url not specified, starting minishift without --iso-url flag")
         child = pexpect.spawn(cmd)
         index = child.expect(["The server is accessible via web console at:", pexpect.EOF, pexpect.TIMEOUT], timeout=600)
