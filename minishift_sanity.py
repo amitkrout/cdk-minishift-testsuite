@@ -7,12 +7,15 @@ import time
 import imp
 import glob
 
-def new_project(self, projectname, registry, servicename, tempalte = False, dbservicename = "default"):
+def new_project(self, uname, password, projectname, registry, servicename, template = False, dbservicename = "default"):
+    
+    output = minishift.oc_login(self, uname, password)
+    self.assertIn("Login successful", output, "Login failed")
     
     output = minishift.add_new_project(self, projectname)
     self.assertIn(projectname, output, "Failed to create " +projectname)
     
-    if not tempalte:
+    if not template:
         output = minishift.add_new_app(self, registry)
         lst = registry.split("/")
         repo = lst[len(lst) - 1]
@@ -28,7 +31,7 @@ def new_project(self, projectname, registry, servicename, tempalte = False, dbse
             parten = re.search(r"^(?=.*?\bdeploys\b)(?=.*?\b%s\b)(?=.*?\bopenshift/%s\b).*$" %(dbservicename, dbservicename), output)
             if parten:
                 self.assertIn(parten, output, dbservicename +" deployment failed")
-    if not tempalte:    
+    if not template:    
         output = minishift.oc_port_expose(self, servicename)
         self.assertIn("exposed", output, "Service failed to expose " +projectname)
     else:
