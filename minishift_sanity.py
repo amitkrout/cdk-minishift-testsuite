@@ -120,10 +120,10 @@ class minishiftSanity(Test):
         self.log.info("Console output: \n" + str(child.before) + str(child.after))
         if not index==0:
             self.fail("CDK setup failed")
-        self.log.info("Checking if rhel.iso exists")
-        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/cache/iso/minishift-rhel.iso" )
+        self.log.info("Checking if minishift-rhel7.iso exists")
+        exists = os.path.isfile( os.environ['HOME'] + "/.minishift/cache/iso/minishift-rhel7.iso" )
         if not exists:
-            self.fail("minishift-rhel.iso is not present")
+            self.fail("minishift-rhel7.iso is not present")
         self.log.info("Checking if oc binary exists")
         oc_binaries = glob.glob( os.environ['HOME'] + "/.minishift/cache/oc/v3.*")
         if not oc_binaries:
