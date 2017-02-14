@@ -246,7 +246,7 @@ class minishiftSanity(Test):
         clean_failed_app(self, self.params.get('openshift_php_PROJECT'))
         new_project(self, self.params.get('openshift_USER'), self.params.get('openshift_PASSWORD'), self.params.get('openshift_nodejsmongodb_PROJECT'), self.params.get('openshift_nodejsmongodb_TEMPLATE'), self.params.get('service_nodejsmongodb_NAME'), template = True, dbservicename = "mongodb")
     
-    def atest_logout(self):
+    def test_logout(self):
         clean_failed_app(self, self.params.get('openshift_nodejsmongodb_PROJECT'))
         output = minishift.oc_logout(self)
         logout_str = "Logged " +"\"" +self.params.get('openshift_USER') +"\"" +" out on " +"\"https://"
