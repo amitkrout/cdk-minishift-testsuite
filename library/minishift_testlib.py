@@ -6,7 +6,7 @@ import time
 
 log = logging.getLogger("Openshift.Debug")
 
-def wait_for_output(cmd, timeout = 60):
+def wait_for_output(cmd, timeout = 180):
     output = "FAIL"
     for i in range(timeout):
         time.sleep(1)
@@ -17,7 +17,7 @@ def wait_for_output(cmd, timeout = 60):
             pass
     return output
 
-def wait_for_text_in_output(cmd, text = '', timeout = 60):
+def wait_for_text_in_output(cmd, text = '', timeout = 180):
     output = "FAIL"
     for i in range(timeout):
         time.sleep(1)
