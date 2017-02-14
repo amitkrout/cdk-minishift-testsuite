@@ -33,16 +33,16 @@ def new_project(self, projectname, registry, servicename, tempalte = False, dbse
         self.assertIn("exposed", output, "Service failed to expose " +projectname)
     else:
         pass
-                                
+
     output = minishift.routing_cdk(self, servicename, projectname)
     self.assertIn("HTTP/1.1 200 OK", output, "Service " +servicename +"-" +projectname +" fail to expose to outside")
-                                    
+
     output = minishift.oc_get_pod(self)
     self.assertIn("Running", output, "Failed to run pod")
-                                        
+
     output = minishift.oc_delete(self, projectname)
     self.assertIn("deleted", output, "Failed to delete " +projectname)
-    
+
 def clean_failed_app(self, projectname):
     output = minishift.oc_delete(self, projectname)
     if output == "FAIL":
@@ -66,13 +66,15 @@ class minishiftSanity(Test):
         self.log.info("###########################################################################################")
         self.Hypervisor_Provider = self.params.get('Hypervisor_Provider')
         self.iso_url = self.params.get('iso_url')
-        self.Provisioning_OpenShift = self.params.get('Provisioning_OpenShift')
         self.Is_Downstream = self.params.get('Is_Downstream')
         self.RHN_Username = self.params.get('RHN_USERNAME')
         self.RHN_Password = self.params.get('RHN_PASSWORD')
-        sys.path.append(self.params.get('minishift_PATH'))
-        sys.path.append(self.params.get('Provisioning_OpenShift'))
         self.log.info("Is downstream: ", self.Is_Downstream)
+        oc_binaries = glob.glob(os.environ['HOME'] + "/.minishift/cache/oc/v3.*/oc")
+        if oc_binaries:
+            self.log.info("adding oc binary into path: " + oc_binaries[0])
+            os.environ['PATH'] = oc_binaries[0] + ":" + os.environ['PATH']
+
 
     """    
     def test_ms_start(self):
