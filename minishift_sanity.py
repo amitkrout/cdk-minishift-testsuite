@@ -73,10 +73,10 @@ class minishiftSanity(Test):
         self.RHN_Username = self.params.get('RHN_USERNAME')
         self.RHN_Password = self.params.get('RHN_PASSWORD')
         self.log.info("Is downstream: ", self.Is_Downstream)
-        oc_binaries = glob.glob(os.environ['HOME'] + "/.minishift/cache/oc/v3.*/oc")
-        if oc_binaries:
-            self.log.info("adding oc binary into path: " + oc_binaries[0])
-            os.environ['PATH'] = oc_binaries[0] + ":" + os.environ['PATH']
+        oc_locations = glob.glob(os.environ['HOME'] + "/.minishift/cache/oc/v3.*/")
+        if oc_locations:
+            self.log.info("adding oc binary into path: " + oc_locations[0])
+            os.environ['PATH'] = oc_locations[0] + ":" + os.environ['PATH']
 
 
     """    
