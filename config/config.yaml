@@ -26,8 +26,8 @@ openshift_nodejs_REGISTRY : "registry.access.redhat.com/rhscl/nodejs-4-rhel7~htt
 service_nodejs_NAME : "nodejs-ex"
 #Set the project inputs (php project name, template name and php service name). It uses the template provided by openshift.
 openshift_php_PROJECT : "test-php"
-openshift_php_template : "cakephp-example" 
-service_php_NAME : "cakephp-example"
+openshift_php_template : "cakephp-mysql-example" 
+service_php_NAME : "cakephp-mysql-example"
 #Set the project inputs (phpnodejs+mongodb project name, template name and php service name). It uses the template provided by openshift.
 openshift_nodejsmongodb_PROJECT : "test-nodejs-mongodb"
 openshift_nodejsmongodb_TEMPLATE : "nodejs-mongodb-example" 
