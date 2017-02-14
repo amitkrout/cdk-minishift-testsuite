@@ -29,6 +29,12 @@ def wait_for_text_in_output(cmd, text = '', timeout = 60):
             pass
     return output
 
+def oc_login(self, uname, password):
+    strcmd = "oc login --username=" +uname +" --password=" +password +" --insecure-skip-tls-verify"
+    self.log.info ("Executing : " +strcmd)
+    output = wait_for_output(strcmd)
+    return output
+
 def add_new_project(self, project_name):
     strcmd = "oc new-project " +project_name 
     self.log.info ("Executing : " +strcmd)
