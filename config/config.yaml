@@ -1,7 +1,6 @@
 Hypervisor_Provider : ""
 minishift_PATH : ""
 minishift_lib_MODULE : ""
-Provisioning_OpenShift : ""
 iso_url : ""
 openshift_USER : ""
 openshift_PASSWORD : ""
